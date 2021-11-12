@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""
+    />
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script
+      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+      crossorigin=""
+    ></script>
+
+    <style>
+      /* Making sure the div has a defined height, otherwise the map will not appear (it will assume the height is zero, if not defined) */
+      #issMap {
+        height: 380px;
+      }
+    </style>
+
+    <title>ISS Location</title>
+  </head>
+  <body>
+    <h1>Where is the ISS?</h1>
+
+    <p>
+      latitude: <span id="lat"></span>&deg<br />
+      longitude: <span id="lon"></span>&deg
+    </p>
+    <!-- Creating a div with a certain ID, where the map is going to be placed -->
+    <div id="issMap"></div>
+
+    <script>
+      // Pasting the map object "mymap" from the quick start guide:
+      // .setView, has long, lat and zoom level respectively
+      //setting it to start at 0,0 -> that is the initial lat and long of the center of what we are loading
+      // the zoom is set to 1 -> no zoom
+      const mymap = L.map("issMap").setView([0, 0], 1);
+
+      //attribution requirements, for OpenStreetMap
+      const attribution =
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+      //once we have attributions, we create a variable called tiles
+      //tile layer takes in 2 things, 1 is the url of the tiles themselves:
+      const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+
+      // 2 is the attribution! put curly brackets around it, because its expected in the form of an object
+
+      const tiles = L.tileLayer(tileUrl, { attribution });
+
+      // now that we can create the leaflet tiles, we just need to add them to the "mymap" var to display
+      tiles.addTo(mymap);
+
+      //making a Marker with a custom icon:
+      const issIcon = L.icon({
+        iconUrl:
+          "https://upload.wikimedia.org/wikipedia/commons/d/d0/International_Space_Station.svg",
+        iconSize: [60, 60],
+        //centered anchor
+        iconAnchor: [25, 16],
+      });
+
+      const marker = L.marker([0, 0], { icon: issIcon }).addTo(mymap);
+
+      const api_url = "https://api.wheretheiss.at/v1/satellites/25544";
+
+      let firstTime = true;
+
+      async function getISS() {
+        const response = await fetch(api_url);
+        // we want to convert the response to JSON
+        const data = await response.json();
+
+        //JS destructuring
+        // taking the pieces out of JS object or an array and putting them into separate variables
+        const { latitude, longitude } = data;
+
+        // L.marker([latitude, longitude]).addTo(mymap);
+        //setting to the new lng and lat every time page is refreshed
+        marker.setLatLng([latitude, longitude]);
+        //we want to set the view only the first time, here is one way to deal with it
+        if (firstTime) {
+          // if its the first time, set the view
+          mymap.setView([latitude, longitude], 3);
+          //so next time it will come around it wont set the view again
+          // this will work, not the most elegant solution though
+          firstTime = false;
+        }
+
+        document.getElementById("lat").textContent = latitude.toFixed(2);
+        document.getElementById("lon").textContent = longitude.toFixed(2);
+      }
+
+      getISS();
+      setInterval(getISS, 1000);
+    </script>
+  </body>
+</html>

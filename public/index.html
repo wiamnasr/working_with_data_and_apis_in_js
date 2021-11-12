@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.dom.min.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="/style.css" /> -->
+    <style>
+
+      body {
+        background-color: rgba(200, 61, 10, 0.411);
+      }
+
+      div {
+        background-color: rgba(102, 126, 57, 0.329);
+        margin: 0 0 0 120px;
+      }
+
+     
+      /* For the weather app */
+      .location,
+      .temperature {
+        height: 30vh;
+        width: 50%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      .temperature {
+        flex-direction: column;
+      }
+
+      .degree-section {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .degree-section span {
+        margin: 10px;
+        font-size: 30px;
+      }
+
+      .degree-section h2 {
+        font-size: 40px;
+      }
+
+      
+    </style>
+    <title>Weather and Air Quality</title>
+  </head>
+  <body>
+    <h1>Data Selfie App</h1>
+    <div><a href="/">enter</a> | <a href="/logs">logs</a></div>
+
+    <div id="checkinMap"></div>
+
+    <p>
+      latitude <span id="latitude"></span>&deg;<br />
+      longitude <span id="longitude"></span>&deg;<br />
+
+      <br />
+    </p>
+    <p id="airQualityP">
+      The concentration of particulate matter (<span id="aq_parameter"></span>)
+      is <span id="aq_value"></span> <span id="aq_units"></span> last read on
+      <span id="aq_date"></span>
+    </p>
+    <form action="index.html">
+      <input
+        type="text"
+        id="mood"
+        name="mood"
+        placeholder="How are you feeling today?"
+      /><br /><br />
+
+      <input type="submit" id="submit" value="Submit" />
+    </form>
+
+    <div class="location">
+      <h1 class="location-timezone">Timezone</h1>
+      <canvas class="icon" width="128" height="128"></canvas>
+    </div>
+
+    <div class="temperature">
+      <div class="degree-section">
+        <h2 class="temperature-degree">34</h2>
+        &deg;<span>F</span>
+      </div>
+      <div class="temperature-description">It's cold outside</div>
+    </div>
+
+    <script src="skycons.js"></script>
+    <script src="sketch.js"></script>
+  </body>
+</html>

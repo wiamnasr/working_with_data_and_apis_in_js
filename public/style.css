@@ -1,0 +1,25 @@
+img {
+  border-radius: 50%;
+  width: 300px;
+  height: 280px;
+  border-style: none;
+}
+
+div {
+  background-color: rgba(102, 126, 57, 0.329);
+  margin: 0 0 0 120px;
+}
+
+/* Making sure the div has a defined height, otherwise the map will not appear (it will assume the height is zero, if not defined) */
+#checkinMap {
+  height: 380px;
+  width: 100%;
+  margin: 100px 0 0 0;
+}
+
+body {
+  display: flex;
+  flex-flow: row wrap;
+  justify-self: center;
+  background-color: rgba(200, 61, 10, 0.411);
+}
